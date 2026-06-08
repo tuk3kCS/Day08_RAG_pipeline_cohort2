@@ -171,7 +171,63 @@ run_dashboard()
 ## Kiến Trúc Hệ Thống
 
 ```
-[Vẽ diagram kiến trúc ở đây]
+┌─────────────────────────────────────────────────────────────────────┐
+│                        DrugLaw AI — RAG Pipeline                    │
+└─────────────────────────────────────────────────────────────────────┘
+
+  DATA LAYER
+  ┌──────────────────────┐   ┌──────────────────────┐
+  │  data/landing/legal/ │   │  data/landing/news/  │
+  │  4 văn bản pháp luật │   │  7 bài báo nghệ sĩ   │
+  │  (PDF / DOCX)        │   │  (JSON crawled)      │
+  └──────────┬───────────┘   └──────────┬───────────┘
+             │  Task 3: MarkItDown               │
+             ▼                                   ▼
+  ┌──────────────────────────────────────────────┐
+  │          data/standardized/ (.md files)      │
+  └──────────────────────┬───────────────────────┘
+                         │  Task 4: Chunking (size=800, overlap=100)
+                         │          Embedding: Cohere embed-v4.0 (1536d)
+                         ▼
+  ┌──────────────────────────────────────────────┐
+  │       Weaviate (local Docker 1.26.6)         │
+  │       1,477 chunks — DrugLawDocs collection  │
+  └──────────────────────────────────────────────┘
+
+  RETRIEVAL LAYER
+                    Query
+                      │
+          ┌───────────┴────────────┐
+          ▼                        ▼
+  Task 5: Semantic Search   Task 6: Lexical Search
+  Cohere embed-v4.0         Weaviate BM25 built-in
+  (search_query)            (+5 bonus pts)
+          │                        │
+          └───────────┬────────────┘
+                      ▼
+              Task 7: RRF Merge
+              → Cohere rerank-v3.5
+              (fallback: Jina v2, MMR)
+                      │
+                      ▼ score < threshold?
+              Task 8: PageIndex Vectorless RAG
+              (fallback khi hybrid score thấp)
+                      │
+                      ▼
+              Task 9: Top-K chunks
+
+  GENERATION LAYER
+                      │
+                      ▼
+          Task 10: reorder_for_llm()
+          (lost-in-the-middle mitigation)
+                      │
+                      ▼
+          OpenAI GPT-4o-mini
+          SYSTEM_PROMPT + context + citation
+                      │
+                      ▼
+          Answer với [Nguồn, Năm] citations
 ```
 
 ---
@@ -180,10 +236,12 @@ run_dashboard()
 
 | Thành viên | MSSV | Nhiệm vụ | Trạng thái |
 |-----------|------|----------|------------|
-| | | | |
-| | | | |
-| | | | |
-| | | | |
+| Trần Hoàng Hà | 2A202600612 | Task 1 (thu thập văn bản pháp luật), Task 2 (crawl bài báo), Task 3 (convert markdown) | Hoàn thành |
+| Hoàng Đức Trường | 2A202600552 | Task 4 (chunking & indexing — Cohere embed-v4.0 + Weaviate Docker), Task 5 (semantic search) | Hoàn thành |
+| Nguyễn Hồ Diệu Linh | 2A202600567 | Task 6 (lexical search — Weaviate BM25 built-in), Task 7 (reranking — Cohere rerank-v3.5 + RRF + MMR) | Hoàn thành |
+| Nguyễn Thị Bích Duyên | 2A202600752 | Task 8 (PageIndex vectorless RAG), Task 9 (retrieval pipeline hoàn chỉnh + fallback logic) | Hoàn thành |
+| Nguyễn Thị Hiểu | 2A202600545 | Task 10 (generation có citation + reorder_for_llm), Yêu cầu 2 (evaluation pipeline — golden dataset + A/B comparison) | Hoàn thành |
+| Nguyễn Hoàng Tùng | 2A202600628 | Yêu cầu 1 (RAG Chatbot — Streamlit UI, conversation memory, source display, citation cards), tích hợp toàn bộ pipeline, docker-compose setup | Hoàn thành |
 
 ---
 

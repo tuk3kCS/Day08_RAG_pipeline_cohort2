@@ -1,0 +1,17 @@
+.pytest_cache/
+__pycache__/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.development
+.env.test
+.env.production
+
+# ChromaDB local persistence directory
+chroma_db/
+*.chroma_db/
+chroma.sqlite3
+
+.claude/

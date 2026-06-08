@@ -1,66 +1,83 @@
 """
 Task 5 — Semantic Search Module.
 
-Viết module tìm kiếm ngữ nghĩa (dense retrieval) trên vector store.
-
-Yêu cầu:
-    - Input: query string + top_k
-    - Output: danh sách chunks có score, sorted descending
-    - Phải tương thích với embedding model và vector store ở Task 4
+Dense retrieval: Cohere embed-v4.0 (query) + Weaviate near_vector.
+input_type="search_query" cho query embedding (khác với "search_document" lúc index).
 """
+
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+from .task4_chunking_indexing import (
+    EMBEDDING_MODEL,
+    COHERE_API_KEY,
+    WEAVIATE_URL,
+    COLLECTION_NAME,
+)
+
+
+def _embed_query(query: str) -> list[float]:
+    """Embed query với Cohere search_query input type."""
+    import cohere
+    co = cohere.ClientV2(COHERE_API_KEY)
+    resp = co.embed(
+        model=EMBEDDING_MODEL,
+        input_type="search_query",
+        texts=[query],
+        embedding_types=["float"],
+    )
+    return list(resp.embeddings.float[0])
 
 
 def semantic_search(query: str, top_k: int = 10) -> list[dict]:
     """
-    Tìm kiếm ngữ nghĩa sử dụng vector similarity.
+    Tìm kiếm ngữ nghĩa dùng Cohere embedding + Weaviate near_vector.
 
     Args:
         query: Câu truy vấn
-        top_k: Số lượng kết quả tối đa
+        top_k: Số kết quả tối đa
 
     Returns:
-        List of {
-            'content': str,      # Nội dung chunk
-            'score': float,      # Cosine similarity score
-            'metadata': dict     # source, doc_type, chunk_index
-        }
+        List of {'content': str, 'score': float, 'metadata': dict}
         Sorted by score descending.
     """
-    # TODO: Implement semantic search
-    #
-    # Bước 1: Embed query bằng cùng model ở Task 4
-    # Bước 2: Query vector store (cosine similarity)
-    # Bước 3: Return top_k results
-    #
-    # Ví dụ với Weaviate:
-    # import weaviate
-    # from sentence_transformers import SentenceTransformer
-    #
-    # model = SentenceTransformer("BAAI/bge-m3")
-    # query_embedding = model.encode(query).tolist()
-    #
-    # client = weaviate.connect_to_local()
-    # collection = client.collections.get("DrugLawDocs")
-    #
-    # results = collection.query.near_vector(
-    #     near_vector=query_embedding,
-    #     limit=top_k,
-    #     return_metadata=MetadataQuery(distance=True)
-    # )
-    #
-    # return [
-    #     {
-    #         "content": obj.properties["content"],
-    #         "score": 1 - obj.metadata.distance,  # distance → similarity
-    #         "metadata": {"source": obj.properties["source"], ...}
-    #     }
-    #     for obj in results.objects
-    # ]
-    raise NotImplementedError("Implement semantic_search")
+    import weaviate
+
+    query_vec = _embed_query(query)
+    client = weaviate.Client(WEAVIATE_URL)
+
+    result = (
+        client.query
+        .get(COLLECTION_NAME, ["content", "source", "doc_type", "chunk_index"])
+        .with_near_vector({"vector": query_vec, "certainty": 0.0})
+        .with_limit(top_k)
+        .with_additional(["certainty", "distance"])
+        .do()
+    )
+
+    hits = result.get("data", {}).get("Get", {}).get(COLLECTION_NAME, [])
+    output = []
+    for h in hits:
+        add = h.get("_additional", {})
+        score = float(add.get("certainty", 0.0))
+        output.append({
+            "content": h.get("content", ""),
+            "score": score,
+            "metadata": {
+                "source": h.get("source", ""),
+                "type": h.get("doc_type", ""),
+                "chunk_index": h.get("chunk_index", 0),
+            },
+        })
+
+    output.sort(key=lambda x: x["score"], reverse=True)
+    return output
 
 
 if __name__ == "__main__":
-    # Test
     results = semantic_search("hình phạt cho tội tàng trữ ma tuý", top_k=5)
     for r in results:
         print(f"[{r['score']:.3f}] {r['content'][:100]}...")

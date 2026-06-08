@@ -1,22 +1,11 @@
 """
 Task 3 — Convert toàn bộ file trong data/landing/ thành Markdown.
 
-Sử dụng MarkItDown của Microsoft:
-    https://github.com/microsoft/markitdown
-
-Cài đặt:
-    pip install markitdown
-
-Hướng dẫn:
-    1. Scan toàn bộ file trong data/landing/ (PDF, DOCX, JSON)
-    2. Convert sang Markdown
-    3. Lưu vào data/standardized/ giữ nguyên cấu trúc thư mục
+Sử dụng MarkItDown của Microsoft để convert PDF/DOCX → Markdown.
 """
 
 import json
 from pathlib import Path
-
-from markitdown import MarkItDown
 
 LANDING_DIR = Path(__file__).parent.parent / "data" / "landing"
 OUTPUT_DIR = Path(__file__).parent.parent / "data" / "standardized"
@@ -28,17 +17,40 @@ def convert_legal_docs():
     output_dir = OUTPUT_DIR / "legal"
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    from markitdown import MarkItDown
     md = MarkItDown()
 
-    for filepath in legal_dir.iterdir():
+    converted = 0
+    for filepath in sorted(legal_dir.iterdir()):
         if filepath.suffix.lower() in (".pdf", ".docx", ".doc"):
             print(f"Converting: {filepath.name}")
-            # TODO: Convert và lưu file
-            # result = md.convert(str(filepath))
-            # output_path = output_dir / f"{filepath.stem}.md"
-            # output_path.write_text(result.text_content, encoding="utf-8")
-            # print(f"  ✓ Saved: {output_path}")
-            raise NotImplementedError("Implement convert_legal_docs")
+            stem = filepath.stem
+            if stem.endswith(".pdf"):
+                stem = stem[:-4]
+            output_path = output_dir / f"{stem}.md"
+            try:
+                result = md.convert(str(filepath))
+                text = result.text_content or ""
+                # Nếu MarkItDown không extract được text (scanned PDF), dùng pdfplumber
+                if len(text.strip()) < 100 and filepath.suffix.lower() == ".pdf":
+                    try:
+                        import pdfplumber
+                        pages = []
+                        with pdfplumber.open(str(filepath)) as pdf:
+                            for page in pdf.pages:
+                                t = page.extract_text()
+                                if t:
+                                    pages.append(t)
+                        text = "\n\n".join(pages)
+                    except Exception:
+                        pass
+                output_path.write_text(text, encoding="utf-8")
+                print(f"  OK Saved: {output_path.name} ({len(text)} chars)")
+                converted += 1
+            except Exception as e:
+                print(f"  Error: {e}")
+
+    return converted
 
 
 def convert_news_articles():
@@ -47,22 +59,26 @@ def convert_news_articles():
     output_dir = OUTPUT_DIR / "news"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    for filepath in news_dir.iterdir():
+    converted = 0
+    for filepath in sorted(news_dir.iterdir()):
         if filepath.suffix.lower() == ".json":
             print(f"Converting: {filepath.name}")
-            # TODO: Đọc JSON, extract content_markdown, lưu thành .md
-            # data = json.loads(filepath.read_text(encoding="utf-8"))
-            # output_path = output_dir / f"{filepath.stem}.md"
-            #
-            # # Thêm metadata header
-            # header = f"# {data.get('title', 'Unknown')}\n\n"
-            # header += f"**Source:** {data.get('url', 'N/A')}\n"
-            # header += f"**Crawled:** {data.get('date_crawled', 'N/A')}\n\n---\n\n"
-            #
-            # content = header + data.get("content_markdown", "")
-            # output_path.write_text(content, encoding="utf-8")
-            # print(f"  ✓ Saved: {output_path}")
-            raise NotImplementedError("Implement convert_news_articles")
+            try:
+                data = json.loads(filepath.read_text(encoding="utf-8"))
+                output_path = output_dir / f"{filepath.stem}.md"
+
+                header = f"# {data.get('title', 'Unknown')}\n\n"
+                header += f"**Source:** {data.get('url', 'N/A')}\n"
+                header += f"**Crawled:** {data.get('date_crawled', 'N/A')}\n\n---\n\n"
+
+                content = header + data.get("content_markdown", "")
+                output_path.write_text(content, encoding="utf-8")
+                print(f"  ✓ Saved: {output_path}")
+                converted += 1
+            except Exception as e:
+                print(f"  ✗ Error: {e}")
+
+    return converted
 
 
 def convert_all():
@@ -72,12 +88,12 @@ def convert_all():
     print("=" * 50)
 
     print("\n--- Legal Documents ---")
-    convert_legal_docs()
+    n_legal = convert_legal_docs()
 
     print("\n--- News Articles ---")
-    convert_news_articles()
+    n_news = convert_news_articles()
 
-    print("\n✓ Done! Output tại:", OUTPUT_DIR)
+    print(f"\n✓ Done! Legal: {n_legal}, News: {n_news} | Output: {OUTPUT_DIR}")
 
 
 if __name__ == "__main__":

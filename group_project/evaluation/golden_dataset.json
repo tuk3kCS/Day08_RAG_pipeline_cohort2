@@ -1,17 +1,87 @@
 [
   {
     "question": "Hình phạt cho tội tàng trữ trái phép chất ma tuý theo Điều 249 Bộ luật Hình sự?",
-    "expected_answer": "Phạt tù từ 1 đến 5 năm đối với trường hợp tàng trữ từ 1g đến dưới 5g heroin hoặc cocaine, hoặc chất ma tuý khác với khối lượng tương đương.",
+    "expected_answer": "Theo Điều 249 Bộ luật Hình sự 2015, tội tàng trữ trái phép chất ma tuý bị phạt tù từ 1 đến 5 năm. Nếu tàng trữ với số lượng lớn hoặc rất lớn, hình phạt có thể lên đến 20 năm hoặc tù chung thân.",
     "expected_context": "Bộ luật Hình sự 2015, Điều 249"
   },
   {
     "question": "Luật Phòng chống ma tuý 2021 quy định những hình thức cai nghiện nào?",
-    "expected_answer": "Cai nghiện tự nguyện tại gia đình, cai nghiện tự nguyện tại cộng đồng, cai nghiện tự nguyện tại cơ sở cai nghiện, và cai nghiện bắt buộc tại cơ sở cai nghiện.",
+    "expected_answer": "Luật Phòng chống ma tuý 2021 quy định 4 hình thức cai nghiện: cai nghiện tự nguyện tại gia đình, cai nghiện tự nguyện tại cộng đồng, cai nghiện tự nguyện tại cơ sở cai nghiện ma tuý, và cai nghiện bắt buộc tại cơ sở cai nghiện ma tuý.",
     "expected_context": "Luật Phòng chống ma tuý 2021, Chương V"
   },
   {
     "question": "Danh mục các chất ma tuý thuộc nhóm I theo quy định pháp luật Việt Nam gồm những chất nào?",
-    "expected_answer": "Nhóm I gồm các chất ma tuý tuyệt đối cấm sử dụng trong y học và đời sống, bao gồm heroin, cocaine, methamphetamine, MDMA (ecstasy), cannabis (cần sa), và các chất tương tự.",
-    "expected_context": "Nghị định 57/2022/NĐ-CP, Phụ lục I"
+    "expected_answer": "Nhóm I gồm các chất ma tuý tuyệt đối cấm sử dụng trong y học và đời sống xã hội, bao gồm heroin, cocaine, methamphetamine (ma tuý đá), MDMA (ecstasy), và nhiều chất tổng hợp khác.",
+    "expected_context": "Nghị định 57/2022/NĐ-CP hoặc Nghị định 105/2021/NĐ-CP, Phụ lục danh mục"
+  },
+  {
+    "question": "Tội vận chuyển trái phép chất ma tuý bị xử lý như thế nào theo Bộ luật Hình sự?",
+    "expected_answer": "Theo Bộ luật Hình sự 2015, tội vận chuyển trái phép chất ma tuý (Điều 250) bị phạt tù từ 2 đến 7 năm. Trường hợp có tổ chức, tái phạm, hoặc số lượng lớn có thể bị phạt đến 20 năm hoặc tù chung thân.",
+    "expected_context": "Bộ luật Hình sự 2015, Điều 250"
+  },
+  {
+    "question": "Điều kiện để một người được coi là nghiện ma tuý theo Luật Phòng chống ma tuý 2021?",
+    "expected_answer": "Theo Luật Phòng chống ma tuý 2021, người nghiện ma tuý là người sử dụng chất ma tuý, thuốc gây nghiện, thuốc hướng thần dẫn đến lệ thuộc vào các chất đó. Việc xác định được căn cứ vào kết quả xét nghiệm và đánh giá y tế.",
+    "expected_context": "Luật Phòng chống ma tuý 2021, Điều 2"
+  },
+  {
+    "question": "Nghị định 105/2021/NĐ-CP quy định về quản lý người sử dụng trái phép chất ma tuý như thế nào?",
+    "expected_answer": "Nghị định 105/2021/NĐ-CP quy định việc lập hồ sơ quản lý, theo dõi người sử dụng trái phép chất ma tuý tại cộng đồng, bao gồm xét nghiệm định kỳ, tư vấn, và hỗ trợ cai nghiện tự nguyện.",
+    "expected_context": "Nghị định 105/2021/NĐ-CP"
+  },
+  {
+    "question": "Tội mua bán trái phép chất ma tuý có thể bị tử hình không?",
+    "expected_answer": "Có. Theo Điều 251 Bộ luật Hình sự 2015, tội mua bán trái phép chất ma tuý có thể bị phạt tử hình trong trường hợp đặc biệt nghiêm trọng, như mua bán số lượng rất lớn hoặc có tổ chức xuyên quốc gia.",
+    "expected_context": "Bộ luật Hình sự 2015, Điều 251"
+  },
+  {
+    "question": "Luật Phòng chống ma tuý 2021 quy định trách nhiệm của gia đình trong phòng chống ma tuý như thế nào?",
+    "expected_answer": "Luật Phòng chống ma tuý 2021 quy định gia đình có trách nhiệm giáo dục, quản lý các thành viên không sử dụng ma tuý, phối hợp với chính quyền trong phòng ngừa, và hỗ trợ người thân cai nghiện.",
+    "expected_context": "Luật Phòng chống ma tuý 2021"
+  },
+  {
+    "question": "Xử lý hành chính người sử dụng trái phép chất ma tuý lần đầu như thế nào?",
+    "expected_answer": "Người sử dụng trái phép chất ma tuý lần đầu bị xử phạt hành chính theo Nghị định xử phạt vi phạm hành chính, đồng thời bị lập hồ sơ quản lý và yêu cầu tham gia cai nghiện tự nguyện.",
+    "expected_context": "Luật Phòng chống ma tuý 2021; Nghị định 105/2021/NĐ-CP"
+  },
+  {
+    "question": "Các tội phạm về ma tuý nào thuộc Chương XX Bộ luật Hình sự 2015?",
+    "expected_answer": "Chương XX Bộ luật Hình sự 2015 bao gồm các tội: trồng cây có chứa chất ma tuý (Điều 247), sản xuất trái phép chất ma tuý (Điều 248), tàng trữ (Điều 249), vận chuyển (Điều 250), mua bán (Điều 251), chiếm đoạt (Điều 252), và tổ chức sử dụng trái phép (Điều 255).",
+    "expected_context": "Bộ luật Hình sự 2015, Chương XX"
+  },
+  {
+    "question": "Cơ sở cai nghiện ma tuý bắt buộc hoạt động theo nguyên tắc nào theo pháp luật hiện hành?",
+    "expected_answer": "Cơ sở cai nghiện ma tuý bắt buộc hoạt động theo nguyên tắc nhân đạo, tôn trọng quyền con người, kết hợp y tế và lao động trị liệu, giáo dục phục hồi hành vi, và chuẩn bị tái hoà nhập cộng đồng.",
+    "expected_context": "Luật Phòng chống ma tuý 2021, Chương V"
+  },
+  {
+    "question": "Nghị định 28/2026 có nội dung gì liên quan đến phòng chống ma tuý?",
+    "expected_answer": "Nghị định 28/2026 quy định chi tiết và hướng dẫn thi hành các điều khoản của Luật Phòng chống ma tuý liên quan đến quản lý, kiểm soát tiền chất, và các biện pháp hành chính trong phòng chống ma tuý.",
+    "expected_context": "Nghị định 28/2026"
+  },
+  {
+    "question": "Hình phạt đối với tội trồng cây thuốc phiện hoặc cây có chứa chất ma tuý là gì?",
+    "expected_answer": "Theo Điều 247 Bộ luật Hình sự 2015, người trồng cây thuốc phiện, cây cần sa, hoặc cây có chứa chất ma tuý bị phạt tù từ 6 tháng đến 3 năm nếu đã được giáo dục nhiều lần mà vẫn vi phạm.",
+    "expected_context": "Bộ luật Hình sự 2015, Điều 247"
+  },
+  {
+    "question": "Người chưa thành niên vi phạm pháp luật về ma tuý được xử lý như thế nào?",
+    "expected_answer": "Người chưa thành niên vi phạm pháp luật về ma tuý được áp dụng các biện pháp nhân đạo hơn, ưu tiên giáo dục và cai nghiện tự nguyện, hạn chế truy cứu hình sự, và có thể áp dụng biện pháp thay thế xử lý hình sự theo Bộ luật Hình sự 2015.",
+    "expected_context": "Bộ luật Hình sự 2015; Luật Phòng chống ma tuý 2021"
+  },
+  {
+    "question": "Quy trình xác định người nghiện ma tuý để đưa vào cai nghiện bắt buộc gồm những bước gì?",
+    "expected_answer": "Quy trình gồm: xét nghiệm chất ma tuý, lập hồ sơ đề nghị, thông báo cho người bị đề nghị và gia đình, UBND cấp xã ra quyết định, chuyển hồ sơ lên UBND cấp huyện hoặc Toà án nhân dân để ra quyết định đưa vào cơ sở cai nghiện bắt buộc.",
+    "expected_context": "Luật Phòng chống ma tuý 2021; Nghị định 105/2021/NĐ-CP"
+  },
+  {
+    "question": "Nghệ sĩ nào bị bắt vì liên quan đến ma tuý theo các bài báo đã thu thập?",
+    "expected_answer": "Theo các bài báo đã thu thập, một số nghệ sĩ Việt Nam bị bắt vì liên quan đến ma tuý, trong đó có các trường hợp bị phát hiện sử dụng hoặc tàng trữ trái phép chất ma tuý và bị xử lý theo pháp luật.",
+    "expected_context": "Các bài báo về nghệ sĩ liên quan ma tuý"
+  },
+  {
+    "question": "Phân biệt tội tàng trữ và tội vận chuyển trái phép chất ma tuý theo Bộ luật Hình sự?",
+    "expected_answer": "Tội tàng trữ (Điều 249) là cất giữ bất hợp pháp ma tuý không nhằm mục đích mua bán. Tội vận chuyển (Điều 250) là di chuyển ma tuý từ nơi này sang nơi khác trái phép. Điểm khác biệt chính là hành vi tàng trữ mang tính tĩnh còn vận chuyển mang tính động.",
+    "expected_context": "Bộ luật Hình sự 2015, Điều 249, Điều 250"
   }
 ]
